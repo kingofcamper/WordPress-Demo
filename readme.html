@@ -1,97 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta name="viewport" content="width=device-width" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>WordPress &#8250; ReadMe</title>
-	<link rel="stylesheet" href="wp-admin/css/install.css?ver=20100228" type="text/css" />
-</head>
-<body>
-<h1 id="logo">
-	<a href="https://wordpress.org/"><img alt="WordPress" src="wp-admin/images/wordpress-logo.png" /></a>
-</h1>
-<p style="text-align: center">Semantic Personal Publishing Platform</p>
+This repo is a clone of [David Zuelkes Wordpress/Heroku repo](https://github.com/dzuelke/wordpress-12factor) and contains configuration changes for my personal blog which can be found on https://blog.winkelmeyer.com.
 
-<h2>First Things First</h2>
-<p>Welcome. WordPress is a very special project to me. Every developer and contributor adds something unique to the mix, and together we create something beautiful that I&#8217;m proud to be a part of. Thousands of hours have gone into WordPress, and we&#8217;re dedicated to making it better every day. Thank you for making it part of your world.</p>
-<p style="text-align: right">&#8212; Matt Mullenweg</p>
+There are the main changes in this repo compared to the original one:
+* Removed the [Bucketeer addon](https://elements.heroku.com/addons/bucketeer) as I'm using a Wordpress addon for accesing AWS S3 instead.
+* Replaced the Twelve-Factor theme with the [Colorlib Sparkling theme](https://colorlib.com/wp/support/sparkling/).
+* Added some customizations to the Sparkling theme (can be found in the [sparkling-theme-customizations](https://github.com/muenzpraeger/blog-wordpress-heroku/tree/master/sparkling-theme-customizations) subfolder).
+* Changed/added some Wordpress addons.
+* Using nginx instead of Apache for serving web components.
 
-<h2>Installation: Famous 5-minute install</h2>
-<ol>
-	<li>Unzip the package in an empty directory and upload everything.</li>
-	<li>Open <span class="file"><a href="wp-admin/install.php">wp-admin/install.php</a></span> in your browser. It will take you through the process to set up a <code>wp-config.php</code> file with your database connection details.
-		<ol>
-			<li>If for some reason this doesn&#8217;t work, don&#8217;t worry. It doesn&#8217;t work on all web hosts. Open up <code>wp-config-sample.php</code> with a text editor like WordPad or similar and fill in your database connection details.</li>
-			<li>Save the file as <code>wp-config.php</code> and upload it.</li>
-			<li>Open <span class="file"><a href="wp-admin/install.php">wp-admin/install.php</a></span> in your browser.</li>
-		</ol>
-	</li>
-	<li>Once the configuration file is set up, the installer will set up the tables needed for your site. If there is an error, double check your <code>wp-config.php</code> file, and try again. If it fails again, please go to the <a href="https://wordpress.org/support/forums/">WordPress support forums</a> with as much data as you can gather.</li>
-	<li><strong>If you did not enter a password, note the password given to you.</strong> If you did not provide a username, it will be <code>admin</code>.</li>
-	<li>The installer should then send you to the <a href="wp-login.php">login page</a>. Sign in with the username and password you chose during the installation. If a password was generated for you, you can then click on &#8220;Profile&#8221; to change the password.</li>
-</ol>
+A short reference to my experiences can be found here: https://blog.winkelmeyer.com/2016/07/seamless-change-moved-this-blog-to-heroku.
 
-<h2>Updating</h2>
-<h3>Using the Automatic Updater</h3>
-<ol>
-	<li>Open <span class="file"><a href="wp-admin/update-core.php">wp-admin/update-core.php</a></span> in your browser and follow the instructions.</li>
-	<li>You wanted more, perhaps? That&#8217;s it!</li>
-</ol>
+Read the original and extensive documentation (kudos to David!) below when you want to apply changes.
 
-<h3>Updating Manually</h3>
-<ol>
-	<li>Before you update anything, make sure you have backup copies of any files you may have modified such as <code>index.php</code>.</li>
-	<li>Delete your old WordPress files, saving ones you&#8217;ve modified.</li>
-	<li>Upload the new files.</li>
-	<li>Point your browser to <span class="file"><a href="wp-admin/upgrade.php">/wp-admin/upgrade.php</a>.</span></li>
-</ol>
 
-<h2>Migrating from other systems</h2>
-<p>WordPress can <a href="https://wordpress.org/support/article/importing-content/">import from a number of systems</a>. First you need to get WordPress installed and working as described above, before using <a href="wp-admin/import.php">our import tools</a>.</p>
+# Twelve-Factor WordPress
 
-<h2>System Requirements</h2>
-<ul>
-	<li><a href="https://secure.php.net/">PHP</a> version <strong>5.6.20</strong> or higher.</li>
-	<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.0</strong> or higher.</li>
-</ul>
+WordPress, the [Twelve-Factor](http://12factor.net/) way: fully managed using Composer and configured using environment variables.
 
-<h3>Recommendations</h3>
-<ul>
-	<li><a href="https://secure.php.net/">PHP</a> version <strong>7.4</strong> or higher.</li>
-	<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.6</strong> or higher.</li>
-	<li>The <a href="https://httpd.apache.org/docs/2.2/mod/mod_rewrite.html">mod_rewrite</a> Apache module.</li>
-	<li><a href="https://wordpress.org/news/2016/12/moving-toward-ssl/">HTTPS</a> support.</li>
-	<li>A link to <a href="https://wordpress.org/">wordpress.org</a> on your site.</li>
-</ul>
+## General Concepts and Considerations
 
-<h2>Online Resources</h2>
-<p>If you have any questions that aren&#8217;t addressed in this document, please take advantage of WordPress&#8217; numerous online resources:</p>
-<dl>
-	<dt><a href="https://codex.wordpress.org/">The WordPress Codex</a></dt>
-		<dd>The Codex is the encyclopedia of all things WordPress. It is the most comprehensive source of information for WordPress available.</dd>
-	<dt><a href="https://wordpress.org/news/">The WordPress Blog</a></dt>
-		<dd>This is where you&#8217;ll find the latest updates and news related to WordPress. Recent WordPress news appears in your administrative dashboard by default.</dd>
-	<dt><a href="https://planet.wordpress.org/">WordPress Planet</a></dt>
-		<dd>The WordPress Planet is a news aggregator that brings together posts from WordPress blogs around the web.</dd>
-	<dt><a href="https://wordpress.org/support/forums/">WordPress Support Forums</a></dt>
-		<dd>If you&#8217;ve looked everywhere and still can&#8217;t find an answer, the support forums are very active and have a large community ready to help. To help them help you be sure to use a descriptive thread title and describe your question in as much detail as possible.</dd>
-	<dt><a href="https://codex.wordpress.org/IRC">WordPress <abbr>IRC</abbr> (Internet Relay Chat) Channel</a></dt>
-		<dd>There is an online chat channel that is used for discussion among people who use WordPress and occasionally support topics. The above wiki page should point you in the right direction. (<a href="irc://irc.freenode.net/wordpress">irc.freenode.net #wordpress</a>)</dd>
-</dl>
+The WordPress installation is fully contained in a `wordpress` subfolder upon `composer install`. A `wp-config.php` resides in the root of the project, and uses several different environment variables to control behavior.
 
-<h2>Final Notes</h2>
-<ul>
-	<li>If you have any suggestions, ideas, or comments, or if you (gasp!) found a bug, join us in the <a href="https://wordpress.org/support/forums/">Support Forums</a>.</li>
-	<li>WordPress has a robust plugin <abbr>API</abbr> (Application Programming Interface) that makes extending the code easy. If you are a developer interested in utilizing this, see the <a href="https://developer.wordpress.org/plugins/">Plugin Developer Handbook</a>. You shouldn&#8217;t modify any of the core code.</li>
-</ul>
+Automatic updates for WordPress or plugins, and theme editing, are disabled intentionally. What you deploy is what gets executed, which makes setups simple to deploy, and, most importantly, reproducible. See further below for information on how to update WordPress versions.
 
-<h2>Share the Love</h2>
-<p>WordPress has no multi-million dollar marketing campaign or celebrity sponsors, but we do have something even better&#8212;you. If you enjoy WordPress please consider telling a friend, setting it up for someone less knowledgable than yourself, or writing the author of a media article that overlooks us.</p>
+[WP-CLI](http://wp-cli.org) is used for easier (or automated) handling of tasks such as enabling plugins or storing configuration options. After a deploy, a set of pre-configured [Composer scripts](https://getcomposer.org/doc/articles/scripts.md) can run several administrative functions using WP-CLI, such as initially configuring the blog, and enabling plugins (this happens either automatically when using a Heroku button deploy, or manually). This means that the installation of plugins and their configuration can be part of your version controlled code, so you can easily re-create a blog installation without any manual steps that need separate documentation.
 
-<p>WordPress is the official continuation of <a href="http://cafelog.com/">b2/caf&#233;log</a>, which came from Michel V. The work has been continued by the <a href="https://wordpress.org/about/">WordPress developers</a>. If you would like to support WordPress, please consider <a href="https://wordpress.org/donate/">donating</a>.</p>
+The configuration file is kept as generic as possible; on Heroku, add-ons [JawsDB](https://elements.heroku.com/addons/jawsdb) (for MySQL), [Bucketeer](https://elements.heroku.com/addons/bucketeer) (for S3 storage), and [SendGrid](https://elements.heroku.com/addons/sendgrid) (for E-Mails) are used.
 
-<h2>License</h2>
-<p>WordPress is free software, and is released under the terms of the <abbr>GPL</abbr> (GNU General Public License) version 2 or (at your option) any later version. See <a href="license.txt">license.txt</a>.</p>
+The assumption is that this installation runs behind a load balancer whose `X-Forwarded-Proto` header value can be trusted; it is used to determine whether the request protocol is HTTPS or not.
 
-</body>
-</html>
+HTTPS is forced for Login and Admin functions. `WP_DEBUG` is on; errors do not get displayed, but should get logged to PHP's default error log, accessible e.g. using `heroku logs`.
+
+## Quick Deploy
+
+If you have a [Heroku](http://heroku.com) account, you may simply use the following button to deploy this application:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+After the deploy, in [Heroku's Dashboard](https://dasboard.heroku.com) under "Settings" for your deployed application, **remove the `WORDPRESS_ADMIN_*` environment variables**.
+
+To set up WordPress' Cron Jobs using [Heroku Scheduler](https://elements.heroku.com/addons/scheduler), see further below.
+
+## Manual Deploy
+
+### Clone
+
+Clone this repo (we're naming the Git remote "`upstream`" since you'll likely want to have "`origin`" be your actual site - you can [sync](https://help.github.com/articles/syncing-a-fork) changes from this repository later):
+
+```
+$ git clone -o upstream https://github.com/dzuelke/wordpress-12factor
+$ cd wordpress-12factor
+```
+
+If you like, you can locally install dependencies with [Composer](https://getcomposer.org):
+
+```
+$ composer install
+```
+
+### Create Application and Add-Ons
+
+Create a new app and add add-ons for MySQL, S3 and E-Mail:
+
+```
+$ heroku create
+$ heroku addons:create jawsdb
+$ heroku addons:create bucketeer
+$ heroku addons:create sendgrid
+```
+
+### Set WordPress Keys and Salts
+
+This will use the WordPress secret keys service, parse out the values, and set them as [config vars](https://devcenter.heroku.com/articles/config-vars):
+
+```
+$ heroku config:set $(curl 'https://api.wordpress.org/secret-key/1.1/salt/' | sed -E -e "s/^define\('(.+)', *'(.+)'\);$/WORDPRESS_\1=\2/" -e 's/ //g')
+```
+
+You can also generate your own key and set all required variables yourself (see section further below).
+
+### Deploy
+
+```
+$ git push heroku master
+```
+
+### Finalize Installation
+
+This will create tables and set up an admin user:
+
+```
+$ heroku run 'composer wordpress-setup-core-install -- --title="WordPress on Heroku" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --url="http://example.herokuapp.com/"'
+```
+
+If you'd like to interactively provide info instead (use a format like "`http://example.herokuapp.com`" with your app name for the URL), you can run:
+
+```
+$ heroku run 'vendor/bin/wp core install --prompt'
+```
+
+Finally, the following command will configure and enable plugins and set a reasonable structure for Permalinks:
+
+```
+$ heroku run 'composer wordpress-setup-finalize'
+```
+
+### Visit Blog
+
+Navigate to the application's URL, or open your browser the lazy way:
+
+```
+$ heroku open
+```
+
+## Installing a new Plugin or Theme
+
+1. Search for your plugin or theme on [WordPress Packagist](http://wpackagist.org);
+1. Click the latest version and check the version selector string in the text box that appears - it will look like `"wpackagist-theme/hueman": "1.5.7"` or `"wpackagist-plugin/akismet": "3.1.7"`;
+1. You don't want such an exact version, but instead a more lenient selector like (in the case above) `^1.5.7` or at least `~1.5.7` (see the [Composer docs](https://getcomposer.org/doc/articles/versions.md#next-significant-release-operators) for details);
+1. Run `composer require wpackagist-$type/name:^$version`, for example:
+
+    ```
+    composer require wpackagist-plugin/akismet:^3.1.7
+    ```
+
+    or
+
+    ```
+    composer require wpackagist-plugin/hueman:^1.5.7
+    ```
+
+1. Run `git add composer.json composer.lock` and `git commit`;
+1. `git push heroku master`
+
+### Activating a Plugin or Theme once
+
+Run `heroku run 'vendor/bin/wp plugin activate` or `vendor/bin/wp theme activate` and pass the name of the plugin or theme (e.g. `wp theme activate hueman`).
+
+However, if you're working on an actual project, you will also want to ensure that this step can be run as part of the installation - see the next section for info.
+
+### Activating a Plugin or Theme, the repeatable way
+
+See the `scripts` section in `composer.json` for inspiration. A [Composer script](https://getcomposer.org/doc/articles/scripts.md) named `wordpress-setup-enable-plugins` (which gets in turn called by another script) enables three plugins by default using WP-CLI's `wp` command, and you can just add yours to the list. You'll notice that a separate step before also configures one of the plugins; you can do the same for your customizations.
+
+After you adjusted the scripts section, run `composer update --lock`, then `git add composer.json composer.lock`, and `git commit` the changes.
+
+## Updating WordPress and Plugins
+
+To update all dependencies:
+
+```
+$ composer update
+```
+
+Alternatively, run `composer update johnpbloch/wordpress` to only update WordPress, or e.g. `composer update wpackagist-plugin/sendgrid-email-delivery-simplified` to only update that plugin.
+
+Afterwards, add, commit and push the changes:
+
+```
+$ git add composer.json composer.lock
+$ git commit -m "new WordPress and Plugins"
+$ git push heroku master
+```
+
+## Web Servers
+
+This project runs Apache by default, using the `apache2-wordpress.conf` [configuration include](/articles/custom-php-settings#web-server-settings) and with the `wordpress/` directory [defined as the document root](/articles/deploying-php#configuring-the-document-root).
+
+To use Nginx instead, [change](/articles/deploying-php#selecting-a-web-server) `Procfile` to the following:
+
+```
+web: vendor/bin/heroku-php-nginx -C nginx-wordpress.conf wordpress/
+```
+
+## WordPress Cron
+
+Instead of having WordPress check on each page load if Cron Jobs need to be run (thus potentially slowing down the site for some users), you can invoke Cron externally:
+
+1. Run `heroku config:set DISABLE_WP_CRON=true` (or set it using the [Heroku Dashboard](https://dasboard.heroku.com)) to disable built-in cron jobs;
+1. Add [Heroku Scheduler](https://elements.heroku.com/addons/scheduler) to your application;
+1. Add a job that, every 30 minutes, runs `vendor/bin/wp cron event run --all`.
+
+## Environment Variables
+
+`wp-config.php` will use the following environment variables (if multiple are listed, in order of precedence):
+
+### Database Connection
+
+`DATABASE_URL` or `JAWSDB_URL` or `CLEARDB_DATABASE_URL` (format `mysql://user:pass@host:port/dbname`) for database connections.
+
+### AWS/S3
+
+* `AWS_ACCESS_KEY_ID` or `BUCKETEER_AWS_ACCESS_KEY_ID` for the AWS Access Key ID;
+* `AWS_SECRET_ACCESS_KEY` `BUCKETEER_AWS_SECRET_ACCESS_KEY` for the AWS Secret Access Key;
+* `S3_BUCKET` or `BUCKETEER_BUCKET_NAME` for the name of the S3 bucket;
+* `S3_REGION` for a non-default S3 region name.
+
+### SendGrid
+
+`SENDGRID_USERNAME` and `SENDGRID_PASSWORD` for SendGrind credentials.
+
+### WordPress Secrets
+
+`WORDPRESS_AUTH_KEY`, `WORDPRESS_SECURE_AUTH_KEY`, `WORDPRESS_LOGGED_IN_KEY`, `WORDPRESS_NONCE_KEY`, `WORDPRESS_AUTH_SALT`, `WORDPRESS_SECURE_AUTH_SALT`, `WORDPRESS_LOGGED_IN_SALT`, `WORDPRESS_NONCE_SALT` should contain random secret keys for various WordPress functions; values can be obtained from https://api.wordpress.org/secret-key/1.1/salt/ (also see Manual Deploy instructions further above).
+
+### Miscellaneous
+
+`DISABLE_WP_CRON` set to "1" or "true" will disable automatic cron execution through browsers (see further above).
